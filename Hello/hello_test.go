@@ -2,7 +2,8 @@ package main
 
 import "testing"
 
-func AssertCorrectGreet(got string, want string, t *testing.T) {
+func AssertCorrectGreet(got string, want string, t testing.TB) {
+	t.Helper()
 	if got != want {
 		t.Errorf("should print %q but got %q", want, got)
 	}
