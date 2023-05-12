@@ -25,8 +25,14 @@ func TestHello(t *testing.T) {
 	})
 
 	t.Run("Greeting with different language", func(t *testing.T) {
-		got := Hello("", "french")
+		got := Hello("", "spanish")
 		want := "Hola World!"
+		AssertCorrectGreet(got, want, t)
+	})
+
+	t.Run("If language is empty default to english", func(t *testing.T) {
+		got := Hello("", "")
+		want := "Hello World!"
 		AssertCorrectGreet(got, want, t)
 	})
 
