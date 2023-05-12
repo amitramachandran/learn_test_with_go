@@ -1,9 +1,9 @@
 package iterators
 
-func Repeat(input string) string {
-	result := ""
-	for i := 0; i < 5; i++ {
-		result = result + input
+func Repeat(input string, times int) string {
+	var result string
+	for i := 0; i < times; i++ {
+		result += input
 	}
 	return result
 }
