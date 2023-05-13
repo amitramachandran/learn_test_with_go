@@ -28,9 +28,14 @@ func SumAll(slicess ...[]int) []int {
 }
 
 func SumAllTails(slicess ...[]int) (result []int) {
-
+	var sum_tail int
 	for _, sli := range slicess {
-		result = append(result, SumOfSlice(sli[1:]))
+		if len(sli) == 0 {
+			sum_tail = 0
+		} else {
+			sum_tail = SumOfSlice(sli[1:])
+		}
+		result = append(result, sum_tail)
 	}
 	return
 }
