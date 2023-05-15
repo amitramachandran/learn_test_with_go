@@ -48,11 +48,11 @@ func TestAddWord(t *testing.T) {
 		dict := Dictionary{}
 		word := "Bat"
 		description := "Bat is a mammal"
-		dict.AddWord(word, description)
+		ok := dict.AddWord(word, description)
 
 		got, err := dict.Search(word)
 
-		assertError(t, err, nil)
+		assertError(t, err, ok)
 		assertDict(t, got, description)
 	})
 
