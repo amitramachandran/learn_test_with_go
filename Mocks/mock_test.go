@@ -3,14 +3,21 @@ package main
 import (
 	"bytes"
 	"testing"
+
+	"golang.org/x/exp/slices"
 )
 
-type SpyMockSleeper struct {
-	call int
+type SpyCountOperations struct {
+	calls []string
 }
 
-func (m *SpyMockSleeper) Sleep() {
-	m.call += 1
+func (m *SpyCountOperations) Sleep() {
+	m.calls = append(m.calls, "sleep")
+}
+
+func (m *SpyCountOperations) Write(p []byte) (n int, e error) {
+	m.calls = append(m.calls, "write")
+	return
 }
 
 func TestCountdown(t *testing.T) {
@@ -21,15 +28,9 @@ func TestCountdown(t *testing.T) {
 		}
 	}
 
-	assertint := func(got, want int) {
-		if got != want {
-			t.Errorf("got %d but expected %d", got, want)
-		}
-	}
-
 	t.Run("to test the countdown method", func(t *testing.T) {
 		buffer := &bytes.Buffer{}
-		spy_sleeper := &SpyMockSleeper{}
+		spy_sleeper := &SpyCountOperations{}
 		Countdown(buffer, spy_sleeper)
 		got := buffer.String()
 		want := `3
@@ -40,11 +41,13 @@ Go!`
 	})
 
 	t.Run("number of times the sleep has been called", func(t *testing.T) {
-		buffer := &bytes.Buffer{}
-		spy_sleeper := &SpyMockSleeper{}
-		Countdown(buffer, spy_sleeper)
-		got := spy_sleeper.call
-		want := 3
-		assertint(got, want)
+		//buffer := &bytes.Buffer{}
+		spy_operation_counter := &SpyCountOperations{}
+		Countdown(spy_operation_counter, spy_operation_counter)
+		got := spy_operation_counter.calls
+		want := []string{`write sleep write sleep write sleep write`}
+		if slices.Equal(got, want) {
+			t.Errorf("operations are not in correct sequence got %s, wanted %s", got, want)
+		}
 	})
 }
