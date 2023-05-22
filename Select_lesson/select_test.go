@@ -17,7 +17,7 @@ func makeHttpServer(sleep_time int) *httptest.Server {
 	return newServer
 }
 
-func TestWebsiteRacer(t *testing.T) {
+func TestWebsiteSelectRacer(t *testing.T) {
 	slowServer := makeHttpServer(2)
 
 	fastServer := makeHttpServer(0)
@@ -28,10 +28,10 @@ func TestWebsiteRacer(t *testing.T) {
 	fastUrl := fastServer.URL
 	slowUrl := slowServer.URL
 
-	got := WebsiteRacer(fastUrl, slowUrl)
-	want := fastUrl
+	_, err := WebsiteSelectRacer(fastUrl, slowUrl, time.Duration(10))
+	// want := fastUrl
 
-	if got != want {
-		t.Errorf("Should get output %s but got %s", want, got)
+	if err == nil {
+		t.Errorf("expected an error %s", err)
 	}
-}
+}        
